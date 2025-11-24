@@ -1,97 +1,68 @@
-
-# EX 2E Pattern Matching using Manacher's Algorithm.
+# EX 2D Pattern Matching using Naive Approach.
 ## DATE : 19-11-2025
 
 ## AIM:
-To write a Java program for the following constraints.
-Longest Palindromic Substring
-Given a string s, return the longest palindromic substring in s.
-using Manacher's Algorithm
+To write a Java program to for given constraints.
+Given text string with length n and a pattern with length m, the task is to prints all occurrences of pattern in text.
+Note: You may assume that n > m.
 
+Examples: 
+
+Input:  text = "THIS IS A TEST TEXT", pattern = "TEST"
+Output: Pattern found at index 10
+
+Input:  text =  "AABAACAADAABAABA", pattern = "AABA"
+Output: Pattern found at index 0, Pattern found at index 9, Pattern found at index 12
 ## Algorithm
 1. Start  
-2. Read the input string `s`.  
-3. If the string is empty, return an empty result.  
-4. Preprocess the string by inserting a special character (e.g., `#`) between each letter and at both ends to handle even-length palindromes uniformly.  
-   - Example: `"abba"` → `"#a#b#b#a#"`  
-5. Initialize variables:  
-   - `p[]` → array to store palindrome radii centered at each position  
-   - `center = 0` and `right = 0` → current center and right boundary of the known palindrome  
-   - `maxLen = 0` and `centerIndex = 0` → track longest palindrome found so far  
-6. For each position `i` in the processed string:  
-   - Find the mirror position: `mirror = 2 * center - i`  
-   - If `i < right`, set `p[i] = min(right - i, p[mirror])`.  
-   - Expand around `i` while characters on both sides match (`t[a] == t[b]`).  
-   - Update `p[i]` for every successful expansion.  
-7. If `i + p[i] > right`, update `center = i` and `right = i + p[i]`.  
-8. If `p[i] > maxLen`, update `maxLen` and `centerIndex`.  
-9. Compute the starting index of the palindrome in the original string:  
-   - `start = (centerIndex - maxLen) / 2`  
-10. Extract and return the substring from `start` to `start + maxLen`.  
-11. Print the longest palindromic substring.  
-12. End  
-
+2. Read the input string `text` and the `pattern` to be searched.  
+3. Find the lengths of both strings:  
+   - `n = length of text`  
+   - `m = length of pattern`  
+4. Loop through the text from index `i = 0` to `i <= n - m`:  
+   - For each position `i`, compare every character of the pattern with the corresponding character in the text.  
+   - If any character does not match, break out of the inner loop.  
+5. If all characters of the pattern match (`j == m`), print the index `i` where the pattern starts in the text.  
+6. Continue checking until the end of the text.  
+7. End  
+ 
 
 ## Program:
 ```
-/*
-Developed by: Mohamed Muffashal K A
-Register Number: 212222220024
-*/
+
 import java.util.Scanner;
 
-public class LongestPalindromeManacher {
+public class NaivePatternSearch {
 
-    public static String longestPalindrome(String s) {
-        if (s == null || s.length() == 0) return "";
+    public static void search(String text, String pattern) {
+        int n = text.length();
+        int m = pattern.length();
 
-        StringBuilder t = new StringBuilder();
-        t.append('#');
-        for (int i = 0; i < s.length(); i++) {
-            t.append(s.charAt(i));
-            t.append('#');
-        }
-
-        int n = t.length();
-        int[] p = new int[n];
-        int center = 0, right = 0;
-        int maxLen = 0, centerIndex = 0;
-
-        for (int i = 0; i < n; i++) {
-            int mirror = 2 * center - i;
-            if (i < right) {
-                p[i] = Math.min(right - i, p[mirror]);
+        for (int i = 0; i <= n - m; i++) {
+            int j;
+            for (j = 0; j < m; j++) {
+                if (text.charAt(i + j) != pattern.charAt(j)) {
+                    break;
+                }
             }
-
-            int a = i + (1 + p[i]);
-            int b = i - (1 + p[i]);
-            while (a < n && b >= 0 && t.charAt(a) == t.charAt(b)) {
-                p[i]++;
-                a++;
-                b--;
-            }
-
-            if (i + p[i] > right) {
-                center = i;
-                right = i + p[i];
-            }
-
-            if (p[i] > maxLen) {
-                maxLen = p[i];
-                centerIndex = i;
+            if (j == m) {
+                System.out.println("Pattern found at index " + i);
             }
         }
-
-        int start = (centerIndex - maxLen) / 2;
-        return s.substring(start, start + maxLen);
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        String result = longestPalindrome(input);
-        System.out.println("Longest Palindromic Substring: " + result);
-        sc.close();
+        Scanner scanner = new Scanner(System.in);
+
+        //System.out.print("Enter the text: ");
+        String text = scanner.nextLine();
+
+        //System.out.print("Enter the pattern: ");
+        String pattern = scanner.nextLine();
+
+        search(text, pattern);
+
+        scanner.close();
     }
 }
 
@@ -99,7 +70,7 @@ public class LongestPalindromeManacher {
 
 ## Output:
 
-<img width="1266" height="391" alt="image" src="https://github.com/user-attachments/assets/c9ecddb8-7f68-427c-b22f-0149833458aa" />
+<img width="1042" height="411" alt="image" src="https://github.com/user-attachments/assets/4fbde6a2-3110-4802-8d7e-116d13020d3d" />
 
 
 ## Result:
